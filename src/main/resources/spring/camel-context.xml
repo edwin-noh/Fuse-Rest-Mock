@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!-- <bean id="userService" class="com.shb.UserService" /> -->
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <restConfiguration bindingMode="auto" component="servlet" port="8280"/>
+        <rest path="/user">
+            <get outType="com.shb.User" uri="/{id}">
+                <route>
+                    <bean method="getUserById(${header.id})" ref="userService"/>
+                    <log id="route-log" message=">>> ${body}"/>
+                    <marshal>
+                        <json library="Gson" prettyPrint="true"/>
+                    </marshal>
+                </route>
+                <!-- <to uri="direct:getUserById" /> contextPath="/core" apiContextPath="/auth" 
+					bindingMode="json" -->
+            </get>
+        </rest>
+        <!-- <route id="simple-route"> -->
+        <!-- <from id="direct:getUserById" /> -->
+        <!-- <bean beanType="" /> -->
+        <!-- <log id="route-log" message=">>> ${body}" /> -->
+        <!-- </route> -->
+    </camelContext>
+</beans>
