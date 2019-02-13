@@ -5,22 +5,15 @@
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <restConfiguration bindingMode="auto" component="servlet" port="8280"/>
         <rest path="/user">
-            <get outType="com.shb.User" uri="/{id}">
+            <get outType="com.shb.User" uri="/{name}">
                 <route>
-                    <bean method="getUserById(${header.id})" ref="userService"/>
+                    <bean method="getUserByName(${header.name})" ref="userService"/>
                     <log id="route-log" message=">>> ${body}"/>
                     <marshal>
                         <json library="Gson" prettyPrint="true"/>
                     </marshal>
                 </route>
-                <!-- <to uri="direct:getUserById" /> contextPath="/core" apiContextPath="/auth" 
-					bindingMode="json" -->
             </get>
         </rest>
-        <!-- <route id="simple-route"> -->
-        <!-- <from id="direct:getUserById" /> -->
-        <!-- <bean beanType="" /> -->
-        <!-- <log id="route-log" message=">>> ${body}" /> -->
-        <!-- </route> -->
     </camelContext>
 </beans>
